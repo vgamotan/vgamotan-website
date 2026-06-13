@@ -38,7 +38,7 @@ export default function Footer() {
             </a>
             <span className="text-[#1B263B]">•</span>
             <a
-              href="https://linkedin.com/in/bilyotoy"
+              href="https://linkedin.com/in/vergegamotan"
               target="_blank"
               rel="noreferrer"
               className="hover:text-white transition-colors"

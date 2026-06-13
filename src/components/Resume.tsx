@@ -1,11 +1,27 @@
-import { Download, Award, GraduationCap, CheckCircle2 } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Download, Award, GraduationCap, CheckCircle2, ChevronDown, FileText, Printer } from 'lucide-react';
 import { careerData, skillsData } from '../data';
 
 export default function Resume() {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const handlePrint = () => {
-    // Elegant fallback simulation - but better, let's open prompt or trigger print of window.
+    setDropdownOpen(false);
     window.print();
   };
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const certifications = [
     'Zoho CRM Certified Administrator',
@@ -39,15 +55,77 @@ export default function Resume() {
             </p>
           </div>
 
-          <div>
+          <div className="relative" ref={dropdownRef}>
             <button
               id="resume-download-pdf-btn"
-              onClick={handlePrint}
-              className="inline-flex items-center px-5 py-3 rounded-lg text-sm font-bold text-white bg-gradient-to-r from-[#00C9A7] to-[#1B263B] border border-[#00C9A7]/40 hover:border-[#00C9A7] hover:shadow-lg hover:shadow-[#00C9A7]/10 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="inline-flex items-center px-5 py-3 rounded-lg text-sm font-bold text-white bg-gradient-to-r from-[#00C9A7] to-[#1B263B] border border-[#00C9A7]/40 hover:border-[#00C9A7] hover:shadow-lg hover:shadow-[#00C9A7]/10 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer focus:outline-none"
             >
               <Download className="mr-2 w-4 h-4 text-[#00C9A7]" />
-              Download / Print CV PDF
+              <span>Download / Print CV PDF</span>
+              <ChevronDown className="ml-2 w-4 h-4 text-gray-300 transition-transform duration-200" style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0)' }} />
             </button>
+
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2.5 w-72 bg-[#0D1B2A] border border-[#1B263B] rounded-xl shadow-2xl p-2 z-35 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="px-3 py-2 border-b border-[#1B263B] mb-1">
+                  <span className="block text-[10px] uppercase font-mono font-bold tracking-wider text-[#00C9A7]">
+                    Select Resume Type
+                  </span>
+                </div>
+                
+                <a
+                  href="/MarTech.pdf"
+                  download="MarTech.pdf"
+                  onClick={() => setDropdownOpen(false)}
+                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-[#1B263B]/50 transition-colors group cursor-pointer"
+                >
+                  <FileText className="w-5 h-5 text-orange-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="block text-xs font-bold text-white group-hover:text-[#00C9A7] transition-colors">
+                      Marketing Technology CV
+                    </span>
+                    <span className="block text-[10px] text-gray-400 mt-0.5">
+                      Focused on MarTech, RevOps & automations
+                    </span>
+                  </div>
+                </a>
+
+                <a
+                  href="/Client%20Services.pdf"
+                  download="Client Services.pdf"
+                  onClick={() => setDropdownOpen(false)}
+                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-[#1B263B]/50 transition-colors group cursor-pointer"
+                >
+                  <FileText className="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="block text-xs font-bold text-white group-hover:text-[#00C9A7] transition-colors">
+                      Client Success Manager CV
+                    </span>
+                    <span className="block text-[10px] text-gray-400 mt-0.5">
+                      Focused on accounts & customer success
+                    </span>
+                  </div>
+                </a>
+
+                <div className="border-t border-[#1B263B] my-1"></div>
+
+                <button
+                  onClick={handlePrint}
+                  className="w-full text-left flex items-start gap-3 p-3 rounded-lg hover:bg-[#1B263B]/50 transition-colors group cursor-pointer"
+                >
+                  <Printer className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="block text-xs font-bold text-white group-hover:text-[#00C9A7] transition-colors">
+                      Print / Save Interactive Profile
+                    </span>
+                    <span className="block text-[10px] text-gray-400 mt-0.5">
+                      PDF snapshot of current page
+                    </span>
+                  </div>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -137,6 +215,34 @@ export default function Resume() {
                   ))}
                 </div>
               </div>
+
+              {/* Education section */}
+              <div className="pt-6">
+                <h4 className="font-display text-lg font-bold text-white mb-6 border-b border-[#415A77]/15 pb-2 print:text-black print:border-black/10 flex items-center">
+                  <GraduationCap className="w-5 h-5 mr-3 text-[#00C9A7]" />
+                  Education
+                </h4>
+
+                <div className="bg-[#091522]/60 border border-[#1B263B] p-5 rounded-xl space-y-3 print:bg-black/5 print:border-black/10 print:text-black">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
+                    <h5 className="font-display text-base font-bold text-white print:text-black hover:text-[#00C9A7] transition-colors">
+                      Bachelor of Science in Computer Science
+                    </h5>
+                    <span className="text-xs font-mono text-[#00C9A7] font-semibold">
+                      2004 — 2008
+                    </span>
+                  </div>
+                  <div className="text-xs flex justify-between font-mono">
+                    <span className="text-gray-300 font-medium print:text-black/80">University of the Philippines</span>
+                    <span className="text-gray-500">Cebu, Philippines</span>
+                  </div>
+                  <ul className="list-disc pl-4 space-y-1 text-xs text-gray-400 font-sans leading-relaxed print:text-black/70">
+                    <li>Ranked #1 national state university with CHED Center of Excellence designation.</li>
+                    <li>Core Academic Focus: Advanced Algorithms & Complexity, Operating Systems & Infrastructure Architecture, and Database & Information Management Systems.</li>
+                  </ul>
+                </div>
+              </div>
+
             </div>
 
             {/* Right Side Column: Technical Skills Matrix & Certs */}

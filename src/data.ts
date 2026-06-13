@@ -65,48 +65,59 @@ export const servicesData: ServiceItem[] = [
 
 export const caseStudiesData: CaseStudyItem[] = [
   {
-    id: 'real-estate-automation',
-    title: 'Speed-to-Lead Automation for Premium Real Estate Brokerage',
-    category: 'Real Estate',
-    client: 'Apex Residences (Singapore & Malaysia)',
-    problem: '65% of social media advertising leads went unanswered for more than 4 hours, resulting in low site tour booking conversions.',
-    approach: 'Engineered a real-time lead pipeline using Make.com and custom webhook receivers. Wired Meta Leads Ads directly into Zoho CRM. Implemented an instant SMS & WhatsApp notification routing matrix using Twilio, assigning leads dynamically based on active agent schedules.',
-    result: 'Drastically reduced lead response time. Secured faster customer touchpoints, triggering immediate follow-ups which translated directly to a marked increase in property viewing bookings within the regional portfolio.',
-    metric: '90s',
-    metricLabel: 'Response Time'
-  },
-  {
-    id: 'ecommerce-attribution',
-    title: 'Server-Side Analytics & Meta Conversions API Deployment',
-    category: 'E-commerce',
-    client: 'Kailor Care (Southeast Asia DTC Brand)',
-    problem: 'iOS 14 privacy limitations caused severe browser-side pixel tracking degradation, leading to incorrect ad attribution and inflated acquisition costs.',
-    approach: 'Implemented Google Tag Manager Server-Side container hosted on Google Cloud. Bound Shopify webhook events to trigger server-side Meta Conversions API (CAPI) and GA4 purchase signals, applying robust event deduplication logic.',
-    result: 'Improved event match quality score to 8.9/10, allowing the algorithm to optimize targeting dynamically. Significantly lowered customer acquisition costs and improved sales attribution.',
-    metric: '28%',
-    metricLabel: 'Reduction in CPA'
-  },
-  {
-    id: 'logistics-crm',
-    title: 'Regional Logistics CRM Consolidation & Customer Services Revamp',
+    id: 'selfiebox-crm',
+    title: 'Lead Intake & Automated Routing Governance',
     category: 'CRM',
-    client: 'TransPacific Supply Chain (SG & Philippines)',
-    problem: 'Customer support teams and sales agents operated on isolated mailboxes, causing lost shipment inquiries, delayed service SLA, and missed follow-ups.',
-    approach: 'Configured a unified Zendesk Suite interconnected with Zoho CRM. Set up automated ticket triggers based on order shipping status, structured an escalation playbook with customized SLA views, and trained the multi-country logistics team on systematic ticketing protocols.',
-    result: 'Streamlined ticket queues, increased sales team visibility into logistics bottlenecks, and ensured regular updates to the pipeline on high-value retail client issues.',
-    metric: '45%',
-    metricLabel: 'YoY Pipeline Growth'
+    client: 'Selfiebox (selfiebox.com.sg)',
+    problem: 'High-velocity corporate event inquiries went unanswered during off-peak hours, resulting in missed activation bookings and high pipeline leakage.',
+    approach: 'Deployed Zoho CRM automated webhook pipelines connecting website booking engines. Tailored automated availability checks, dynamic package quotation generation, and immediate team notification routing via instant messaging integration.',
+    result: 'Optimized speed-to-lead response intervals, successfully capturing high-value corporate holiday activations and booking requests before competitors could reply.',
+    metric: '30%',
+    metricLabel: 'Booking Velocity Increase'
   },
   {
-    id: 'tech-revops',
-    title: 'B2B RevOps Overhaul & Automated Lead Scoring Machine',
+    id: 'brandable-martech',
+    title: 'Multi-Channel Corporate Customization Infrastructure',
+    category: 'E-commerce',
+    client: 'Brandable (brandable.com.sg)',
+    problem: 'Siloed lead intake loops, chaotic inventory tracking, and manual custom-print quoting overhead restricted scale for personalized corporate gifting programs.',
+    approach: 'Architected automated custom logo print simulations, multi-tier volume discount quote engines, and built direct integrations passing verified accounts into centralized production and design schedules.',
+    result: 'Streamlined corporate client checkout experiences, significantly growing bulk merchandising accounts and supporting strategic IP rollouts (Disney, Pokémon).',
+    metric: '45% YoY',
+    metricLabel: 'Pipeline Account Expansion'
+  },
+  {
+    id: 'martech-migration',
+    title: 'AI-Driven MarTech Architecture Migration',
     category: 'Automation',
-    client: 'Aegis Security (ASEAN Enterprise SaaS)',
-    problem: 'Sales personnel spent 35% of their day calling micro-leads that did not meet their target corporate profile, stalling enterprise sales cycles.',
-    approach: 'Integrated Clearbit data enrichment with HubSpot forms. Devised a scoring matrix based on employee count, geography, and web actions. Configured auto-routing rules that instantly assigned qualified accounts to senior reps.',
-    result: 'Saves hours of manual lead filtering. Amplified marketing-to-sales handoff efficiency, generating higher-quality bookings for the key account management tier.',
-    metric: '38%',
-    metricLabel: 'MQL-to-SQL Conversion'
+    client: 'Accelerato Pte Ltd',
+    problem: 'Fragmented customer tracking loops and manual lead transitions across Zoho CRM and Zendesk led to lead-leakage, high latency, and excessive sales workloads.',
+    approach: 'Designed and executed the full API integration of custom AI pre-sales agents into Zoho CRM and Zendesk — automating multi-channel digital intent tracking across the full MQL-to-SQL funnel and setting up automated flow actions.',
+    result: 'Successfully accelerated lead handover speed and reduced manual overhead, converting qualified prospects in real-time with maximum speed-to-lead precision.',
+    metric: '30%',
+    metricLabel: 'Pipeline Velocity Boost'
+  },
+  {
+    id: 'retail-scaleup',
+    title: 'Cross-Border D2C Retail Scale-Up',
+    category: 'E-commerce',
+    client: 'Yutopia (Singapore & Malaysia)',
+    problem: 'Scaling brick-and-mortar storefronts required a centralized platform with real-time inventory synchronization, cross-border localized POS, and automated tracking.',
+    approach: 'Engineered the global system architecture, custom full-stack e-commerce engine (yutopia.com.sg), and automated logistics SOPs that scaled the brand from single roadshows to 10 permanent premium tourist and heartland storefronts with licensed IPs like Disney, Sanrio, and Pokémon.',
+    result: 'Centralized multi-channel operations, reducing inventory mismatch discrepancies and streamlining the entire retail and logistics supply-chain reporting.',
+    metric: '10',
+    metricLabel: 'Permanent Storefronts'
+  },
+  {
+    id: 'bpo-enablement',
+    title: 'Global BPO Technical Enablement Programme',
+    category: 'CRM',
+    client: 'Microsoft Philippines',
+    problem: 'SaaS migrations to cloud subscription architectures (Office 365) required rapid onboarding and upskilling of hundreds of support agents under enterprise SLA standards.',
+    approach: 'Designed and steered large-scale technical validation curricula to train 1,500+ support representatives on cloud frameworks, directories, and Windows setups, as the active Subject Matter Expert.',
+    result: 'Maintained a zero re-escalation rate on Tier-3 advanced escalations while improving average CSAT scores across a floor of 350+ active global support agents.',
+    metric: '1,500+',
+    metricLabel: 'Agents Certified'
   }
 ];
 
@@ -168,63 +179,91 @@ export const influencerData: InfluencerProject[] = [
 export const careerData: CareerItem[] = [
   {
     id: 'career-1',
-    role: 'Principal MarTech & RevOps Consultant',
-    company: 'Independent SME Practice (Verge Consulting)',
-    location: 'Singapore & Malaysia',
-    period: '2021 — Present',
+    role: 'Senior Marketing Technology & Client Operations Lead',
+    company: 'Accelerato Pte Ltd',
+    location: 'Singapore',
+    period: 'Oct 2020 — Present',
     descriptionPoints: [
-      'Provide boutique consultancy services for Southeast Asian SMEs in real estate, professional services, and retail commerce.',
-      'Surgical audit and architectural mapping of clients\' SaaS ecosystems, eliminating software redundancy and standardizing CRM databases.',
-      'Construct automated event and webhook architectures to seamlessly pass valuable business signals between ads, websites, and sales desks.'
+      'Led customer operations and digital transformation initiatives supporting multiple business units across retail, recruitment, and marketing services, improving operational productivity by 30%.',
+      'Managed enterprise CRM ecosystems integrating Zoho CRM and Zendesk, enabling automated customer engagement, lead qualification, and service workflows that accelerated sales pipeline velocity by 30%.',
+      'Directed cross-functional teams of 50+ marketers, engineers, creatives, and support specialists to ensure consistent service delivery, operational alignment, and client satisfaction.',
+      'Oversaw strategic partnerships and licensing negotiations with global brands including Disney, Sanrio, and Pokémon, contributing to successful retail expansion from 0 to 10 permanent storefront locations across Singapore and Malaysia.',
+      'Built scalable operational systems supporting e-commerce, logistics, customer support, and reporting functions for multi-location retail operations.',
+      'Launched AI-driven recruitment and customer engagement workflows supporting regional workforce deployment across Southeast Asia, Australia, Hong Kong, and the Middle East.',
+      'Overhauled CRM, lead scoring, and logistics workflows for four sister brands (Printcity, Selfiebox, Brandable & Ergocollections) — mapping pre-sales digital intent to post-delivery customer experience, reducing pipeline-to-close friction across all business units.'
     ],
     keyAchievements: [
-      'Averaged a 25% reduction in yearly software licensing costs for consulting clients.',
-      'Supervised the custom deployment of 15+ comprehensive Zoho CRM and Zendesk environments with clear localized workflow rulebooks.',
-      'Built automated speed-to-lead notification bridges for 3 property brokerages, dropping sales response delays by over 90%.'
+      'Transformed fragmented operational systems into a centralized customer and revenue operations ecosystem.',
+      'Expanded marketing-attributable pipeline contributions by 45% YoY.',
+      'Pivoted to white-label Recruitment-as-a-Service platforms deploying AI-driven sourcing pipelines for 100+ remote sales professionals.'
     ]
   },
   {
     id: 'career-2',
-    role: 'Digital Operations Manager',
-    company: 'Logistics Scale-up (Southeast Asia Operations)',
-    location: 'Singapore & Malaysia',
-    period: '2018 — 2021',
+    role: 'Group Technical & Marketing Technology Lead',
+    company: 'Invesso Pte Ltd',
+    location: 'Singapore, Malaysia & Philippines',
+    period: 'Aug 2018 — Aug 2020',
     descriptionPoints: [
-      'Led the cross-department Operations and Marketing technology alignment to serve multi-border merchant transactions.',
-      'Administered advanced CRM systems (HubSpot/Salesforce) and configured advanced pipelines tracking merchant onboarding, compliance checks, and parcel SLAs.',
-      'Coordinated technical cross-team integrations involving customer support triggers and transactional automated messaging.'
+      'Governed centralized MarTech architecture and automated marketing operations engine across 3 business units — Printcity Products Pte Ltd, The Verticals Consultancy Pte Ltd, and Invesso Malaysia — ensuring unified data visibility and cross-brand campaign performance.',
+      'Orchestrated full international expansion of Kuala Lumpur digital agency office, recruiting and leading a 20-person cross-functional team of developers, content creators, video editors, and Sales Development Representatives (SDRs) from zero.',
+      'Architected and delivered custom full-stack web platforms, CRM systems, and demand generation pipelines for a global client portfolio across North America, Hong Kong, the Middle East, and Asia — spanning SaaS, HR, professional services, and real estate verticals.',
+      'Served as Lead Technical Project Manager for enterprise application builds including corporate operations software and automated medical patient record tracking systems — delivering on-time, within scope for regulated industries.',
+      'Delivered technology and marketing strategy consulting to Singapore SMEs including premium country clubs and the Retail Association of Singapore, driving measurable improvements in customer lifetime value through structured digital transformation roadmaps.'
     ],
     keyAchievements: [
-      'Accelerated client onboarding cycle times by 40% using automated form triggers and integration with internal operations databases.',
-      'Established regional governance principles that unified lead scoring profiles for sales teams based in Singapore and Kuala Lumpur.'
+      'Scaled regional operations from startup phase into structured multi-country service org.',
+      'Orchestrated KL agency office recruiting and leading a 20-person regional cross-functional team.',
+      'Architected and delivered custom corporate operations software and patient tracking solutions for regulated verticals.'
     ]
   },
   {
     id: 'career-3',
-    role: 'Senior Digital Marketing Solutions Architect',
-    company: 'Apex Digital Solutions Partner',
-    location: 'Manila, Philippines',
-    period: '2014 — 2018',
+    role: 'ICT Manager',
+    company: 'Noble Manhattan Coaching Ltd (UK)',
+    location: 'Remote / United Kingdom',
+    period: 'Apr 2013 — Jan 2017',
     descriptionPoints: [
-      'Architected digital customer acquisition setups for high-tier real estate groups and retail brands expanding in the APAC market.',
-      'Managed custom web tracking infrastructures (Google Analytics, custom server setups) to ensure perfect attribution across multi-stage funnels.'
+      'Managed end-to-end ICT infrastructure and website deployments for a global executive coaching organization — administering multi-regional server networks and interactive digital learning platforms.',
+      'Overhauled authentication matrices and system frameworks, improving data security compliance and operational workflow efficiency for cross-border remote workforces.',
+      'Served as a key escalation point for technical and operational support issues affecting internal users and external stakeholders.'
     ],
     keyAchievements: [
-      'Designed lead generation configurations generating more than 5,000 qualified real-estate inquiries monthly.',
-      'Deployed multi-step nurture drip campaign integrations that boosted sales discovery calls by 2.5x.'
+      'Restructured internal workflows and strengthened infrastructure governance.',
+      'Supported seamless connectivity and business continuity for distributed international teams.'
     ]
   },
   {
     id: 'career-4',
-    role: 'MarTech Specialist & CRM Administrator',
-    company: 'Envision Growth Group',
-    location: 'Manila, Philippines',
-    period: '2010 — 2014',
+    role: 'Culture & Product Associate Trainer & Escalation Specialist',
+    company: 'Microsoft Corporation',
+    location: 'Philippines',
+    period: 'Apr 2009 — Apr 2013',
     descriptionPoints: [
-      'Supported SME clients with hands-on CRM platform management, sales routing systems, email marketing campaign setups, and landing page engineering.'
+      'Directed training delivery and operational quality standards for a 350+ agent operational site serving North American enterprise markets across voice and chat support channels.',
+      'Designed and delivered technical curricula that certified 1,500+ representatives in Windows systems, BPO infrastructure, and enterprise technical support — one of the largest single-cohort training initiatives at the site.',
+      'Served as primary SME and Red Hat specialist for all Tier-3 escalations, resolving critical OS, Office Applications and directory server issues with zero re-escalation rate.',
+      'Spearheaded enterprise-wide workforce readiness campaigns, successfully migrating legacy perpetual software users to Microsoft\'s cloud-based SaaS subscription architecture (Office 365).'
     ],
     keyAchievements: [
-      'Built and maintained 30+ segmented subscriber newsletter profiles, improving average email open rates to 32%.'
+      'Maintained a zero re-escalation rate on Tier-3 advanced escalations.',
+      'Certified and upskilled over 1,500 customer support representatives.'
+    ]
+  },
+  {
+    id: 'career-5',
+    role: 'Technical Support Specialist',
+    company: 'Time Warner Cable',
+    location: 'Philippines',
+    period: 'Apr 2008 — Apr 2009',
+    descriptionPoints: [
+      'Delivered frontline technical support and issue resolution for telecom and internet service customers.',
+      'Consistently achieved strong customer satisfaction scores through effective root-cause analysis and SLA adherence.',
+      'Handled high-volume support interactions while maintaining quality and resolution standards.'
+    ],
+    keyAchievements: [
+      'Maintained top-tier diagnostic resolution metrics.',
+      'Consistently scored highest customer CSAT ratios on the floor.'
     ]
   }
 ];

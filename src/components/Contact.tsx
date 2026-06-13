@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Linkedin, Calendar, CheckSquare, Clock, Globe, ArrowRight, CheckCircle2, Instagram } from 'lucide-react';
+import { Mail, Linkedin, Calendar, CheckSquare, Clock, Globe, ArrowRight, CheckCircle2, Instagram, Copy, Check, ExternalLink, CalendarPlus, Download } from 'lucide-react';
 
 interface ContactProps {
   preFilledService: string;
@@ -16,6 +16,7 @@ export default function Contact({ preFilledService, clearPreFill }: ContactProps
     brief: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [copiedStatus, setCopiedStatus] = useState(false);
 
   // Calendar Booking Mock State
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
@@ -43,11 +44,73 @@ export default function Contact({ preFilledService, clearPreFill }: ContactProps
     }
   }, [preFilledService]);
 
+  const generateMailtoLink = () => {
+    const emailTo = 'verge.gamotan@gmail.com';
+    const emailSubject = `Strategy Briefing Inquiry - ${formData.name} [${formData.projectType}]`;
+    const emailBody = `Hi Verge,
+
+I would like to schedule a strategy briefing with you. Here are my project parameter details:
+
+- Name: ${formData.name}
+- Email: ${formData.email}
+- Targeted Area: ${formData.projectType}
+- Monthly Budget: ${formData.budget}
+
+Brief & System Painpoints:
+${formData.brief}
+
+Best regards,
+${formData.name}`;
+    return `mailto:${emailTo}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+  };
+
+  const getGmailWebLink = () => {
+    const emailTo = 'verge.gamotan@gmail.com';
+    const emailSubject = `Strategy Briefing Inquiry - ${formData.name} [${formData.projectType}]`;
+    const emailBody = `Hi Verge,
+
+I would like to schedule a strategy briefing with you. Here are my project parameter details:
+
+- Name: ${formData.name}
+- Email: ${formData.email}
+- Targeted Area: ${formData.projectType}
+- Monthly Budget: ${formData.budget}
+
+Brief & System Painpoints:
+${formData.brief}
+
+Best regards,
+${formData.name}`;
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=${emailTo}&su=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+  };
+
+  const handleCopyText = () => {
+    const emailText = `Hi Verge,
+
+I would like to schedule a strategy briefing with you. Here are my project parameter details:
+
+- Name: ${formData.name}
+- Email: ${formData.email}
+- Targeted Area: ${formData.projectType}
+- Monthly Budget: ${formData.budget}
+
+Brief & System Painpoints:
+${formData.brief}
+
+Best regards,
+${formData.name}`;
+    navigator.clipboard.writeText(emailText);
+    setCopiedStatus(true);
+    setTimeout(() => setCopiedStatus(false), 2000);
+  };
+
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.name.trim() && formData.email.trim()) {
       setIsSubmitted(true);
       clearPreFill();
+      // Instantly trigger default mail client popup
+      window.location.href = generateMailtoLink();
     }
   };
 
@@ -72,6 +135,87 @@ export default function Contact({ preFilledService, clearPreFill }: ContactProps
   ];
 
   const availableHours = ['10:00 AM SGT', '11:30 AM SGT', '02:00 PM SGT', '03:30 PM SGT', '05:00 PM SGT'];
+
+  const getGoogleCalendarLink = () => {
+    if (selectedDay === null || !selectedTime) return '';
+    
+    const dayStr = `202606${selectedDay.toString().padStart(2, '0')}`;
+    let hourStartStr = '100000';
+    let hourEndStr = '101500';
+    
+    if (selectedTime.includes('10:00 AM')) {
+      hourStartStr = '100000';
+      hourEndStr = '101500';
+    } else if (selectedTime.includes('11:30 AM')) {
+      hourStartStr = '113000';
+      hourEndStr = '114500';
+    } else if (selectedTime.includes('02:00 PM')) {
+      hourStartStr = '140000';
+      hourEndStr = '141500';
+    } else if (selectedTime.includes('03:30 PM')) {
+      hourStartStr = '153000';
+      hourEndStr = '154500';
+    } else if (selectedTime.includes('05:00 PM')) {
+      hourStartStr = '170000';
+      hourEndStr = '171500';
+    }
+    
+    const datesParam = `${dayStr}T${hourStartStr}/${dayStr}T${hourEndStr}`;
+    const title = encodeURIComponent('MarTech & RevOps Strategy Briefing | Verge Gamotan');
+    const details = encodeURIComponent('Introductory 15-minute briefing session to discuss customer engagement, CRM workflows, and MarTech optimization pipeline with Vergilio Jr Gamotan. Scheduled via Interactive Direct Scheduler on portfolio website.');
+    const location = encodeURIComponent('Google Meet (Link will be updated in confirmation email)');
+    
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${datesParam}&details=${details}&location=${location}&ctz=Asia/Singapore`;
+  };
+
+  const handleDownloadICS = () => {
+    if (selectedDay === null || !selectedTime) return;
+    
+    const dayStr = `202606${selectedDay.toString().padStart(2, '0')}`;
+    let hourStartStr = '100000';
+    let hourEndStr = '101500';
+    
+    if (selectedTime.includes('10:00 AM')) {
+      hourStartStr = '100000';
+      hourEndStr = '101500';
+    } else if (selectedTime.includes('11:30 AM')) {
+      hourStartStr = '113000';
+      hourEndStr = '114500';
+    } else if (selectedTime.includes('02:00 PM')) {
+      hourStartStr = '140000';
+      hourEndStr = '141500';
+    } else if (selectedTime.includes('03:30 PM')) {
+      hourStartStr = '153000';
+      hourEndStr = '154500';
+    } else if (selectedTime.includes('05:00 PM')) {
+      hourStartStr = '170000';
+      hourEndStr = '171500';
+    }
+    
+    const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Verge Gamotan//MarTech Consultant//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+SUMMARY:MarTech & RevOps Strategy Briefing | Verge Gamotan
+DTSTART;TZID=Asia/Singapore:${dayStr}T${hourStartStr}
+DTEND;TZID=Asia/Singapore:${dayStr}T${hourEndStr}
+DESCRIPTION:Introductory 15-minute briefing session to discuss customer engagement, CRM workflows, and MarTech optimization pipeline with Vergilio Jr Gamotan.
+LOCATION:Google Meet
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+END:VCALENDAR`;
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Verge_Gamotan_Strategy_Briefing_June_${selectedDay}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleConfirmReservation = () => {
     if (selectedDay !== null && selectedTime) {
@@ -214,27 +358,71 @@ export default function Contact({ preFilledService, clearPreFill }: ContactProps
               </form>
             ) : (
               /* Success intake block */
-              <div className="space-y-6 text-center my-auto py-10">
+              <div className="space-y-6 text-center my-auto py-6">
                 <div className="w-16 h-16 rounded-full bg-[#00C9A7]/15 flex items-center justify-center mx-auto border border-[#00C9A7]/30">
                   <CheckCircle2 className="w-8 h-8 text-[#00C9A7]" />
                 </div>
                 
                 <div className="space-y-2">
-                  <h3 className="font-display text-xl font-bold text-white">Inquiry Parameters Evaluated</h3>
-                  <p className="text-sm text-gray-300 font-sans max-w-sm mx-auto leading-relaxed">
-                    Thank you, <strong className="text-white">{formData.name}</strong>. Your parameters regarding <strong className="text-white">{formData.projectType}</strong> with a budget of <strong className="text-[#00C9A7]">{formData.budget}</strong> have been filed.
+                  <h3 className="font-display text-xl font-bold text-white">Strategy Briefing Request Prepared</h3>
+                  <p className="text-xs text-gray-300 font-sans max-w-sm mx-auto leading-relaxed">
+                    Thank you, <strong className="text-white">{formData.name}</strong>. Your briefing parameters regarding <strong className="text-white">{formData.projectType}</strong> (Budget: <strong className="text-[#00C9A7]">{formData.budget}</strong>) are ready.
                   </p>
-                  <p className="text-xs text-gray-400 font-sans">
-                    You will receive a custom system architecture map proposal within 24 business hours at {formData.email}.
-                  </p>
+                  <div className="bg-[#0D1B2A]/70 text-left p-4 rounded-xl border border-[#1B263B] text-xs font-mono text-gray-400 max-w-md mx-auto space-y-1">
+                    <p className="text-[#00C9A7] text-[10px] font-bold uppercase tracking-wider">Email Subject Target:</p>
+                    <p className="text-white truncate">Strategy Briefing Inquiry - {formData.name}</p>
+                    <p className="text-[#00C9A7] text-[10px] font-bold uppercase tracking-wider mt-2">Brief Snippet:</p>
+                    <p className="line-clamp-2 italic">"{formData.brief || 'No custom brief provided.'}"</p>
+                  </div>
                 </div>
 
-                <div className="pt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md mx-auto pt-2">
+                  {/* Option 1: Mailto client */}
+                  <a
+                    href={generateMailtoLink()}
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-white bg-[#00C9A7] hover:bg-[#00b395] shadow-md transition-all cursor-pointer"
+                  >
+                    <Mail className="w-4 h-4" />
+                    Launch Mail Client
+                  </a>
+
+                  {/* Option 2: Gmail Web */}
+                  <a
+                    href={getGmailWebLink()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-white bg-[#1B263B] hover:bg-[#1B263B]/80 border border-[#00C9A7]/30 hover:border-[#00C9A7] transition-all cursor-pointer"
+                  >
+                    <ExternalLink className="w-4 h-4 text-[#00C9A7]" />
+                    Open in Gmail Web
+                  </a>
+                </div>
+
+                {/* Option 3: Copy details */}
+                <div className="flex flex-col items-center space-y-3 pt-1">
+                  <button
+                    type="button"
+                    onClick={handleCopyText}
+                    className="inline-flex items-center gap-2 text-xs font-semibold text-gray-400 hover:text-white transition-colors cursor-pointer bg-[#0D1B2A] border border-[#1B263B] px-4 py-2 rounded-lg"
+                  >
+                    {copiedStatus ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-[#00C9A7]" />
+                        <span className="text-[#00C9A7]">Parameters Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>Copy Email Text Outline</span>
+                      </>
+                    )}
+                  </button>
+
                   <button
                     onClick={handleResetForm}
-                    className="px-5 py-2.5 bg-[#1B263B] hover:bg-[#1B263B]/80 text-[#00C9A7] font-semibold text-xs rounded-lg border border-[#415A77]/40 hover:border-[#00C9A7]/50 transition-colors cursor-pointer"
+                    className="text-xs text-[#00C9A7] hover:underline font-mono"
                   >
-                    Modify submitted details
+                    ← Edit or submit parameters again
                   </button>
                 </div>
               </div>
@@ -256,7 +444,7 @@ export default function Contact({ preFilledService, clearPreFill }: ContactProps
                   <Mail className="w-4 h-4" />
                 </a>
                 <a
-                  href="https://linkedin.com/in/bilyotoy"
+                  href="https://linkedin.com/in/vergegamotan"
                   target="_blank"
                   rel="noreferrer"
                   className="p-2 bg-[#0D1B2A] border border-[#1B263B] text-gray-400 hover:text-[#00C9A7] hover:border-[#00C9A7]/40 rounded-lg transition-all shadow-md"
@@ -394,35 +582,61 @@ export default function Contact({ preFilledService, clearPreFill }: ContactProps
               </div>
             ) : (
               /* Success verified scheduler panel */
-              <div className="space-y-6 text-center my-auto py-10">
+              <div className="space-y-6 text-center my-auto py-8">
                 <div className="w-16 h-16 rounded-full bg-[#00C9A7]/15 flex items-center justify-center mx-auto border border-[#00C9A7]/30">
                   <Clock className="w-8 h-8 text-[#00C9A7]" />
                 </div>
                 
                 <div className="space-y-2">
-                  <h3 className="font-display text-xl font-bold text-white">Briefing Block Reserved</h3>
-                  <div className="bg-[#0D1B2A]/90 p-4 rounded-xl border border-[#1B263B] inline-block text-left space-y-1">
-                    <p className="text-xs text-gray-400 font-mono">CONFIRMED MEETING:</p>
+                  <h3 className="font-display text-xl font-bold text-white">Briefing Block Selected</h3>
+                  <div className="bg-[#0D1B2A]/90 p-4 rounded-xl border border-[#1B263B] inline-block text-left space-y-1 mx-auto max-w-sm">
+                    <p className="text-xs text-gray-400 font-mono">CONFIRMED MEETING BLOCK:</p>
                     <p className="text-sm font-display font-extrabold text-white">
-                      Thursday, June {selectedDay} @ {selectedTime}
+                      {baseDays.find(d => d.day === selectedDay)?.name === 'Mon' ? 'Monday' : 
+                       baseDays.find(d => d.day === selectedDay)?.name === 'Tue' ? 'Tuesday' : 
+                       baseDays.find(d => d.day === selectedDay)?.name === 'Wed' ? 'Wednesday' : 
+                       baseDays.find(d => d.day === selectedDay)?.name === 'Thu' ? 'Thursday' : 'Friday'}, June {selectedDay}, 2026 @ {selectedTime}
                     </p>
                     <p className="text-[10px] text-[#00C9A7] font-mono font-medium">Auto-synced SGT Singapore timezone ✓</p>
                   </div>
                   <p className="text-xs text-gray-400 font-sans max-w-sm mx-auto leading-relaxed mt-4">
-                    A personalized calendar invitation containing the secure Zoom conference details has been generated. Let's make your MarTech architecture high performance.
+                    Your interactive briefing is configured. Now create your calendar invite block using the direct sync shortcuts below:
                   </p>
                 </div>
 
-                <div className="pt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md mx-auto pt-2">
+                  {/* Option 1: Google Calendar templates */}
+                  <a
+                    href={getGoogleCalendarLink()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-white bg-[#00C9A7] hover:bg-[#00b395] shadow-md transition-all cursor-pointer"
+                  >
+                    <CalendarPlus className="w-4 h-4" />
+                    Add to Google Calendar
+                  </a>
+
+                  {/* Option 2: ICS Calendar file downloader */}
+                  <button
+                    type="button"
+                    onClick={handleDownloadICS}
+                    className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-white bg-[#1B263B] hover:bg-[#1B263B]/80 border border-[#00C9A7]/30 hover:border-[#00C9A7] transition-all cursor-pointer"
+                  >
+                    <Download className="w-4 h-4 text-[#00C9A7]" />
+                    Download invite (.ics)
+                  </button>
+                </div>
+
+                <div className="pt-2">
                   <button
                     onClick={() => {
                       setSelectedDay(null);
                       setSelectedTime(null);
                       setIsBookingConfirmed(false);
                     }}
-                    className="px-5 py-2.5 bg-[#1B263B] hover:bg-[#1B263B]/80 text-[#00C9A7] font-semibold text-xs rounded-lg border border-[#415A77]/40 hover:border-[#00C9A7]/50 transition-colors cursor-pointer"
+                    className="text-xs text-[#00C9A7] hover:underline font-mono"
                   >
-                    Book another time instead
+                    ← Book another time instead
                   </button>
                 </div>
               </div>

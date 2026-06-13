@@ -1,7 +1,7 @@
 import { MessageSquare, PhoneCall } from 'lucide-react';
 
 export default function WhatsAppButton() {
-  const whatsappUrl = 'https://wa.me/6580000000?text=Hi%20Verge%2C%20I%20saw%20your%20Verge%20consulting%20portfolio%20and%2520would%20love%20to%20discuss%20a%20MarTech/CRM%20system%20audit%20for%20my%20SME.';
+  const whatsappUrl = 'https://wa.me/6590286434?text=Hi%20Verge%2C%20I%20saw%20your%20MarTech%20%26%20RevOps%20portfolio%20and%20would%20love%20to%20discuss%20a%20CRM%20system%20audit%20for%20my%20SME.';
 
   return (
     <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end space-y-2 pointer-events-none">
