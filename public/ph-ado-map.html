@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Anti-Discrimination Ordinances — Philippines</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#0d0d0d;font-family:Arial,sans-serif;min-height:100vh;}
+
+  .rainbow-bar{height:6px;background:linear-gradient(90deg,#e40303,#ff8c00,#ffed00,#008026,#004dff,#750787);}
+
+  header{background:#111;padding:18px 24px 14px;text-align:center;border-bottom:1px solid #333;}
+  header h1{font-size:clamp(16px,3vw,26px);font-weight:700;color:white;letter-spacing:3px;font-family:Georgia,serif;}
+  header p{font-size:clamp(8px,1.2vw,11px);color:#ccc;letter-spacing:3px;margin-top:4px;}
+  .rainbow-divider{height:3px;background:linear-gradient(90deg,#e40303,#ff8c00,#ffed00,#008026,#004dff,#750787);margin-top:12px;border-radius:2px;}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#1a1a1a;}
+
+  .panel{display:flex;flex-direction:column;}
+  .panel-header{padding:10px;text-align:center;}
+  .panel-header h2{font-size:clamp(11px,2vw,15px);font-weight:700;color:white;letter-spacing:3px;font-family:Georgia,serif;text-shadow:0 1px 4px rgba(0,0,0,0.5);}
+  .panel-header p{font-size:clamp(7px,1vw,9px);color:rgba(255,255,255,0.85);letter-spacing:1px;margin-top:2px;}
+
+  .panel-luzon .panel-header{background:linear-gradient(135deg,#e40303,#ff8c00);}
+  .panel-visayas .panel-header{background:linear-gradient(135deg,#ffed00,#008026);}
+  .panel-mindanao .panel-header{background:linear-gradient(135deg,#004dff,#750787);}
+
+  canvas{display:block;width:100%;cursor:crosshair;}
+
+  .panel-list{padding:10px 12px;flex:1;}
+  .panel-luzon .panel-list{background:#1a0a00;}
+  .panel-visayas .panel-list{background:#001a04;}
+  .panel-mindanao .panel-list{background:#05001a;}
+
+  .list-heading{font-size:clamp(7px,1vw,9px);font-weight:700;letter-spacing:2px;margin-bottom:6px;border-bottom:1px solid;padding-bottom:4px;}
+  .panel-luzon .list-heading{color:#ff8c00;border-color:#ff8c0033;}
+  .panel-visayas .list-heading{color:#00cc44;border-color:#00cc4433;}
+  .panel-mindanao .list-heading{color:#a06aff;border-color:#a06aff33;}
+
+  .province-block{margin-bottom:6px;}
+  .province-name{font-size:clamp(8px,1.1vw,9.5px);font-weight:700;}
+  .panel-luzon .province-name{color:#ff8c00;}
+  .panel-visayas .province-name{color:#00cc44;}
+  .panel-mindanao .province-name{color:#a06aff;}
+  .city-item{font-size:clamp(7px,1vw,8.5px);line-height:1.75;padding-left:10px;}
+  .panel-luzon .city-item{color:#ffe0c0;}
+  .panel-visayas .city-item{color:#c0ffd0;}
+  .panel-mindanao .city-item{color:#e0d0ff;}
+
+  footer{background:#111;padding:10px 16px;border-top:1px solid #333;display:flex;flex-wrap:wrap;justify-content:center;gap:16px;align-items:center;}
+  .legend-item{display:flex;align-items:center;gap:6px;font-size:clamp(8px,1vw,10px);}
+  .legend-dot{width:12px;height:12px;border-radius:50%;border:1.5px solid white;flex-shrink:0;}
+  .legend-luzon{background:linear-gradient(135deg,#e40303,#ff8c00);color:#ffd0a0;}
+  .legend-visayas{background:linear-gradient(135deg,#ffed00,#008026);color:#c0ffd0;}
+  .legend-mindanao{background:linear-gradient(135deg,#004dff,#750787);color:#e0d0ff;}
+  .legend-note{font-size:clamp(7px,0.9vw,9px);color:#666;}
+
+  #tooltip{
+    position:fixed;
+    background:rgba(5,5,15,0.97);
+    color:#fff;
+    font-size:clamp(9px,1.1vw,11px);
+    padding:8px 13px;
+    border-radius:8px;
+    pointer-events:none;
+    display:none;
+    max-width:260px;
+    line-height:1.6;
+    z-index:9999;
+    box-shadow:0 4px 24px rgba(0,0,0,0.7);
+    border-left:3px solid #ff8c00;
+    border-right:3px solid #ff8c00;
+    transition:opacity 0.12s;
+  }
+  #tooltip strong{display:block;margin-bottom:3px;font-size:clamp(10px,1.2vw,12px);}
+
+  @media(max-width:640px){
+    .grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="rainbow-bar"></div>
+
+<header>
+  <h1>ANTI-DISCRIMINATION ORDINANCES</h1>
+  <p>LOCAL GOVERNMENT UNITS &nbsp;·&nbsp; PHILIPPINES</p>
+  <div class="rainbow-divider"></div>
+</header>
+
+<div class="grid">
+  <div class="panel panel-luzon">
+    <div class="panel-header"><h2>LUZON</h2><p>19 PROVINCES &amp; CITIES</p></div>
+    <canvas id="c-luzon"></canvas>
+    <div class="panel-list">
+      <div class="list-heading">LUZON LGUs WITH ADO</div>
+      <div id="luzon-list"></div>
+    </div>
+  </div>
+  <div class="panel panel-visayas">
+    <div class="panel-header"><h2>VISAYAS</h2><p>7 PROVINCES &amp; CITIES</p></div>
+    <canvas id="c-visayas"></canvas>
+    <div class="panel-list">
+      <div class="list-heading">VISAYAS LGUs WITH ADO</div>
+      <div id="visayas-list"></div>
+    </div>
+  </div>
+  <div class="panel panel-mindanao">
+    <div class="panel-header"><h2>MINDANAO</h2><p>10 PROVINCES &amp; CITIES</p></div>
+    <canvas id="c-mindanao"></canvas>
+    <div class="panel-list">
+      <div class="list-heading">MINDANAO LGUs WITH ADO</div>
+      <div id="mindanao-list"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="legend-item"><div class="legend-dot legend-luzon"></div><span style="color:#ffd0a0;">Luzon ADO</span></div>
+  <div class="legend-item"><div class="legend-dot legend-visayas"></div><span style="color:#c0ffd0;">Visayas ADO</span></div>
+  <div class="legend-item"><div class="legend-dot legend-mindanao"></div><span style="color:#e0d0ff;">Mindanao ADO</span></div>
+  <span class="legend-note">▲ Mountain ranges &nbsp; ≋ Sea depth &nbsp; ● Hover / tap a pin for details</span>
+</footer>
+
+<div class="rainbow-bar" style="transform:scaleX(-1);"></div>
+
+<div id="tooltip"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const LUZON_DATA=[
+  {p:"Ilocos Sur",c:["Vigan City","Candon City"]},
+  {p:"La Union",c:["Baguio City"]},
+  {p:"Cagayan",c:["Tuguegarao City"]},
+  {p:"Isabela",c:["Ilagan City"]},
+  {p:"Zambales",c:["Municipality of Palauig"]},
+  {p:"Dagupan City",c:["Dagupan City (independent)"]},
+  {p:"Angeles City",c:["Angeles City (independent)"]},
+  {p:"Bulacan",c:["Municipality of Guiguinto","City of San Jose del Monte","City of Malolos","Municipality of Bulakan"]},
+  {p:"Bataan",c:["Municipality of Samal","Municipality of Orani"]},
+  {p:"Metro Manila",c:["Quezon City","Pasay City","Valenzuela City","Taguig City","San Juan City","Pasig City","Marikina City","City of Manila","Mandaluyong City","Malabon City","Barangay Babag (QC)","Barangay Greater Lagro (QC)","Barangay Pansol (QC)"]},
+  {p:"Cavite",c:["(see local data)"]},
+  {p:"Laguna",c:["Municipality of Los Baños","City of San Pedro","Municipality of Calauan"]},
+  {p:"Batangas",c:["Batangas City"]},
+  {p:"Quezon Province",c:["Municipality of San Francisco","Municipality of Pabilao","Tayabas City","Municipality of Catanauan"]},
+  {p:"Oriental Mindoro",c:["Calapan City"]},
+  {p:"Palawan",c:["Puerto Princesa City"]},
+  {p:"Camarines Norte",c:["Municipality of Daet"]},
+  {p:"Camarines Sur",c:["Naga City","Municipality of Calabanga"]},
+  {p:"Albay",c:["Municipality of Rapu-Rapu","Legazpi City"]},
+];
+const VISAYAS_DATA=[
+  {p:"Cebu",c:["Municipality of Santa Fe","Municipality of Carmen","Municipality of Poro","Mandaue City","Lapu-Lapu City","Cebu City"]},
+  {p:"Iloilo",c:["Municipality of San Miguel","Iloilo City"]},
+  {p:"Capiz",c:["Roxas City"]},
+  {p:"Negros Occidental",c:["Bacolod City"]},
+  {p:"Negros Oriental",c:["Dumaguete City"]},
+  {p:"Eastern Samar",c:["Municipality of San Julian","Municipality of Giporlos","Borongan City"]},
+  {p:"Leyte",c:["Baybay City"]},
+];
+const MINDANAO_DATA=[
+  {p:"Misamis Oriental",c:["Cagayan de Oro City","Municipality of Alubijid"]},
+  {p:"Bukidnon",c:["Malaybalay City"]},
+  {p:"Agusan del Norte",c:["Butuan City"]},
+  {p:"Surigao del Sur",c:["Tandag City","Barangay San Agustin Sur (Tandag)"]},
+  {p:"Dinagat Islands",c:["(see local data)"]},
+  {p:"Davao de Oro",c:["Municipality of Mabini"]},
+  {p:"Davao City",c:["Davao City"]},
+  {p:"Zamboanga City",c:["Zamboanga City (independent)"]},
+  {p:"South Cotabato",c:["General Santos City"]},
+  {p:"Tawi-Tawi",c:["Municipality of Panglima Sugala"]},
+];
+
+const PINS={
+  luzon:[
+    {lon:120.39,lat:17.57,label:"Ilocos Sur",cities:"Vigan City · Candon City"},
+    {lon:120.59,lat:16.41,label:"La Union",cities:"Baguio City"},
+    {lon:121.73,lat:17.61,label:"Cagayan",cities:"Tuguegarao City"},
+    {lon:121.89,lat:16.92,label:"Isabela",cities:"Ilagan City"},
+    {lon:119.91,lat:15.44,label:"Zambales",cities:"Municipality of Palauig"},
+    {lon:120.33,lat:16.04,label:"Dagupan City",cities:"Independent chartered city"},
+    {lon:120.59,lat:15.14,label:"Angeles City",cities:"Independent chartered city"},
+    {lon:120.88,lat:14.87,label:"Bulacan",cities:"Guiguinto · San Jose del Monte · Malolos · Bulakan"},
+    {lon:120.54,lat:14.77,label:"Bataan",cities:"Municipality of Samal · Municipality of Orani"},
+    {lon:120.98,lat:14.60,label:"Metro Manila",cities:"QC · Pasay · Valenzuela · Taguig · San Juan · Pasig · Marikina · Manila · Mandaluyong · Malabon + 3 Barangays (QC)"},
+    {lon:120.87,lat:14.24,label:"Cavite",cities:"(see local data)"},
+    {lon:121.24,lat:14.17,label:"Laguna",cities:"Los Baños · San Pedro · Calauan"},
+    {lon:121.06,lat:13.76,label:"Batangas",cities:"Batangas City"},
+    {lon:121.95,lat:13.94,label:"Quezon Province",cities:"San Francisco · Pabilao · Tayabas City · Catanauan"},
+    {lon:121.18,lat:13.42,label:"Oriental Mindoro",cities:"Calapan City"},
+    {lon:118.74,lat:9.74,label:"Palawan",cities:"Puerto Princesa City"},
+    {lon:122.98,lat:14.10,label:"Camarines Norte",cities:"Municipality of Daet"},
+    {lon:123.19,lat:13.62,label:"Camarines Sur",cities:"Naga City · Municipality of Calabanga"},
+    {lon:123.76,lat:12.97,label:"Albay",cities:"Municipality of Rapu-Rapu · Legazpi City"},
+  ],
+  visayas:[
+    {lon:123.89,lat:10.32,label:"Cebu",cities:"Santa Fe · Carmen · Poro · Mandaue · Lapu-Lapu · Cebu City"},
+    {lon:122.56,lat:10.70,label:"Iloilo",cities:"Municipality of San Miguel · Iloilo City"},
+    {lon:122.75,lat:11.59,label:"Capiz",cities:"Roxas City"},
+    {lon:122.95,lat:10.68,label:"Negros Occidental",cities:"Bacolod City"},
+    {lon:123.31,lat:9.31,label:"Negros Oriental",cities:"Dumaguete City"},
+    {lon:125.43,lat:11.65,label:"Eastern Samar",cities:"San Julian · Giporlos · Borongan City"},
+    {lon:124.80,lat:10.68,label:"Leyte",cities:"Baybay City"},
+  ],
+  mindanao:[
+    {lon:124.65,lat:8.48,label:"Misamis Oriental",cities:"Cagayan de Oro City · Municipality of Alubijid"},
+    {lon:125.13,lat:8.16,label:"Bukidnon",cities:"Malaybalay City"},
+    {lon:125.53,lat:8.95,label:"Agusan del Norte",cities:"Butuan City"},
+    {lon:126.20,lat:9.05,label:"Surigao del Sur",cities:"Tandag City · Bgy. San Agustin Sur"},
+    {lon:125.60,lat:10.12,label:"Dinagat Islands",cities:"(see local data)"},
+    {lon:126.06,lat:7.37,label:"Davao de Oro",cities:"Municipality of Mabini"},
+    {lon:125.61,lat:7.19,label:"Davao City",cities:"Davao City"},
+    {lon:122.07,lat:6.91,label:"Zamboanga City",cities:"Independent chartered city"},
+    {lon:125.17,lat:6.11,label:"South Cotabato",cities:"General Santos City"},
+    {lon:119.98,lat:5.23,label:"Tawi-Tawi",cities:"Municipality of Panglima Sugala"},
+  ]
+};
+
+const PANEL_CFG=[
+  {
+    id:"luzon",key:"luzon",
+    center:[121.0,16.0],scale:2500,
+    seaColors:["#1a0505","#3a0a10","#200508"],
+    landColors:["#8b1a1a","#b52020","#d43030","#e85050"],
+    pinColors:["#ff8c00","#ffed00"],
+    mountains:[
+      {lon:120.7,lat:18.0,h:16,label:"Cordillera"},{lon:121.5,lat:17.2,h:12},
+      {lon:121.8,lat:16.3,h:10},{lon:122.0,lat:13.8,h:7},
+      {lon:122.5,lat:13.0,h:13,label:"Mt. Mayon"},{lon:121.5,lat:15.5,h:8},
+      {lon:121.2,lat:15.0,h:7},{lon:123.0,lat:13.5,h:9},
+    ],
+  },
+  {
+    id:"visayas",key:"visayas",
+    center:[123.2,10.8],scale:4200,
+    seaColors:["#001a05","#003a10","#001508"],
+    landColors:["#0a5a20","#0e7a2a","#12a038","#20c050"],
+    pinColors:["#ffed00","#004dff"],
+    mountains:[
+      {lon:122.2,lat:11.2,h:9},{lon:122.9,lat:10.9,h:7},
+      {lon:123.5,lat:10.4,h:8,label:"Cebu Mts."},{lon:124.5,lat:11.2,h:10,label:"Samar Mts."},
+      {lon:124.8,lat:10.5,h:8},{lon:123.0,lat:9.8,h:6},
+    ],
+  },
+  {
+    id:"mindanao",key:"mindanao",
+    center:[124.2,7.6],scale:2900,
+    seaColors:["#05001a","#0a0038","#080028"],
+    landColors:["#2a0870","#3d0fa0","#5518c0","#7030e0"],
+    pinColors:["#004dff","#750787"],
+    mountains:[
+      {lon:124.5,lat:8.2,h:18,label:"Mt. Apo"},{lon:125.5,lat:8.0,h:10},
+      {lon:125.0,lat:7.5,h:9},{lon:123.8,lat:8.0,h:7},
+      {lon:126.1,lat:8.5,h:8},{lon:124.0,lat:7.2,h:6},{lon:125.3,lat:9.0,h:7},
+    ],
+  },
+];
+
+// ── BUILD LISTS ───────────────────────────────────────────────────────────────
+function buildList(data,elId){
+  const el=document.getElementById(elId);
+  data.forEach(d=>{
+    const div=document.createElement("div");
+    div.className="province-block";
+    let html=`<div class="province-name">◆ ${d.p}</div>`;
+    d.c.forEach(c=>{html+=`<div class="city-item">• ${c}</div>`;});
+    div.innerHTML=html;
+    el.appendChild(div);
+  });
+}
+buildList(LUZON_DATA,"luzon-list");
+buildList(VISAYAS_DATA,"visayas-list");
+buildList(MINDANAO_DATA,"mindanao-list");
+
+// ── TOOLTIP ───────────────────────────────────────────────────────────────────
+const TIP=document.getElementById("tooltip");
+let tipVisible=false;
+
+function showTip(pin,colors,ex,ey){
+  TIP.style.borderLeftColor=colors[0];
+  TIP.style.borderRightColor=colors[1];
+  TIP.innerHTML=`<strong>${pin.label}</strong>${pin.cities}`;
+  TIP.style.display="block";
+  tipVisible=true;
+  moveTip(ex,ey);
+}
+function moveTip(ex,ey){
+  let lx=ex+16,ly=ey-12;
+  if(lx+270>window.innerWidth) lx=ex-274;
+  if(ly+100>window.innerHeight) ly=ey-104;
+  TIP.style.left=lx+"px";
+  TIP.style.top=ly+"px";
+}
+function hideTip(){TIP.style.display="none";tipVisible=false;}
+document.addEventListener("click",e=>{if(!e.target.closest("canvas")) hideTip();});
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function lighten(hex,a){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return`rgb(${Math.min(255,r+a)},${Math.min(255,g+a)},${Math.min(255,b+a)})`;
+}
+function darken(hex,a){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return`rgb(${Math.max(0,r-a)},${Math.max(0,g-a)},${Math.max(0,b-a)})`;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderPanel(panel,phFeatures){
+  const el=document.getElementById("c-"+panel.id);
+  const dpr=window.devicePixelRatio||1;
+  const W=el.parentElement.clientWidth||300;
+  const H=Math.round(W*1.68);
+  el.width=W*dpr; el.height=H*dpr; el.style.height=H+"px";
+  const ctx=el.getContext("2d");
+  ctx.scale(dpr,dpr);
+
+  const proj=d3.geoMercator().center(panel.center).scale(panel.scale*(W/227)).translate([W/2,H/2]);
+  const pathGen=d3.geoPath().projection(proj).context(ctx);
+
+  // Sea
+  const sg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H));
+  sg.addColorStop(0,panel.seaColors[0]);
+  sg.addColorStop(0.5,panel.seaColors[1]);
+  sg.addColorStop(1,panel.seaColors[2]);
+  ctx.fillStyle=sg; ctx.fillRect(0,0,W,H);
+
+  // Pride wave rings
+  const wc=["#e4030355","#ff8c0055","#ffed0055","#00802655","#004dff55","#75078755"];
+  for(let i=0;i<22;i++){
+    ctx.beginPath(); ctx.arc(W/2,H/2,18+i*18,0,Math.PI*2);
+    ctx.strokeStyle=wc[i%6]; ctx.lineWidth=0.7; ctx.stroke();
+  }
+  ctx.lineWidth=0.5;
+  for(let i=0;i<18;i++){
+    const y=8+i*(H/16);
+    ctx.beginPath();
+    for(let x=0;x<W;x+=3){
+      const wy=y+Math.sin(x*0.08+i*0.7)*2.5;
+      x===0?ctx.moveTo(x,wy):ctx.lineTo(x,wy);
+    }
+    ctx.strokeStyle=wc[i%6]; ctx.stroke();
+  }
+
+  // Shadow
+  ctx.save(); ctx.translate(3,4);
+  phFeatures.forEach(f=>{ctx.beginPath();pathGen(f);ctx.fillStyle="rgba(0,0,0,0.22)";ctx.fill();});
+  ctx.restore();
+
+  // Land base
+  phFeatures.forEach(f=>{ctx.beginPath();pathGen(f);ctx.fillStyle=panel.landColors[0];ctx.fill();});
+
+  // Elevation gradient
+  phFeatures.forEach(f=>{
+    ctx.beginPath();pathGen(f);ctx.save();ctx.clip();
+    const b=d3.geoBounds(f);
+    const p0=proj([b[0][0],b[1][1]])||[0,0];
+    const p1=proj([b[1][0],b[0][1]])||[W,H];
+    const tg=ctx.createLinearGradient(p0[0],p0[1],p1[0],p1[1]);
+    tg.addColorStop(0,panel.landColors[3]);
+    tg.addColorStop(0.4,panel.landColors[2]);
+    tg.addColorStop(0.75,panel.landColors[1]);
+    tg.addColorStop(1,panel.landColors[0]);
+    ctx.fillStyle=tg;
+    ctx.fillRect(Math.min(p0[0],p1[0])-2,Math.min(p0[1],p1[1])-2,Math.abs(p1[0]-p0[0])+4,Math.abs(p1[1]-p0[1])+4);
+    ctx.restore();
+  });
+
+  // Coastal highlight
+  phFeatures.forEach(f=>{
+    ctx.beginPath();pathGen(f);
+    ctx.strokeStyle="rgba(255,255,255,0.35)";ctx.lineWidth=1.5;ctx.stroke();
+  });
+
+  // Trees
+  const rng=(()=>{let s=42;return()=>{s=(s*1664525+1013904223)&0xffffffff;return(s>>>0)/0xffffffff;};})();
+  phFeatures.forEach(f=>{
+    const b=d3.geoBounds(f);
+    const ls=b[1][0]-b[0][0],as=b[1][1]-b[0][1];
+    for(let i=0;i<32;i++){
+      const tlon=b[0][0]+rng()*ls,tlat=b[0][1]+rng()*as;
+      const pt=proj([tlon,tlat]); if(!pt) continue;
+      const [tx,ty]=pt,ts=(2.5+rng()*2.5)*(W/227);
+      if(tx<3||tx>W-3||ty<3||ty>H-3) continue;
+      ctx.beginPath();
+      ctx.moveTo(tx,ty-ts*1.8);ctx.lineTo(tx+ts,ty+ts*0.3);ctx.lineTo(tx-ts,ty+ts*0.3);
+      ctx.closePath();ctx.fillStyle=darken(panel.landColors[2],22);ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(tx,ty-ts*2.6);ctx.lineTo(tx+ts*0.7,ty-ts*0.5);ctx.lineTo(tx-ts*0.7,ty-ts*0.5);
+      ctx.closePath();ctx.fillStyle=lighten(panel.landColors[3],14);ctx.fill();
+    }
+  });
+
+  // Mountains
+  const sc=W/227;
+  panel.mountains.forEach(m=>{
+    const pt=proj([m.lon,m.lat]); if(!pt) return;
+    const [mx,my]=pt,h=(m.h||8)*sc,w=h*1.9;
+    if(mx<0||mx>W||my<0||my>H) return;
+    ctx.beginPath();ctx.moveTo(mx-w*.45,my+4);ctx.lineTo(mx+w*.45,my+4);ctx.lineTo(mx,my-h+4);
+    ctx.closePath();ctx.fillStyle="rgba(0,0,0,0.2)";ctx.fill();
+    ctx.beginPath();ctx.moveTo(mx,my-h);ctx.lineTo(mx+w*.5,my);ctx.lineTo(mx,my);
+    ctx.closePath();ctx.fillStyle=darken(panel.landColors[0],30);ctx.fill();
+    ctx.beginPath();ctx.moveTo(mx-w*.5,my);ctx.lineTo(mx,my-h);ctx.lineTo(mx,my);
+    ctx.closePath();ctx.fillStyle=lighten(panel.landColors[3],25);ctx.fill();
+    ctx.beginPath();ctx.moveTo(mx-w*.5,my);ctx.lineTo(mx,my-h);ctx.lineTo(mx+w*.5,my);
+    ctx.strokeStyle="rgba(255,255,255,0.2)";ctx.lineWidth=0.4;ctx.stroke();
+    if(h>=10*sc){
+      const sh=h*0.3;
+      ctx.beginPath();ctx.moveTo(mx-w*.18,my-h+sh+2);ctx.lineTo(mx+w*.18,my-h+sh+2);ctx.lineTo(mx,my-h);
+      ctx.closePath();ctx.fillStyle="rgba(255,255,255,0.88)";ctx.fill();
+    }
+    if(m.label){
+      const fs=Math.round(6.5*sc);
+      ctx.font=`bold ${fs}px Arial`;ctx.textAlign="center";
+      ctx.fillStyle="rgba(0,0,0,0.45)";ctx.fillText(m.label,mx+.5,my+9*sc+.5);
+      ctx.fillStyle="rgba(255,255,255,0.9)";ctx.fillText(m.label,mx,my+9*sc);
+    }
+  });
+
+  // Pins with hover animation state
+  const pinCoords=[];
+  let hoveredPin=null;
+
+  function drawPins(hovered=null){
+    // Clear pin area by redrawing isn't efficient — we track and redraw on hover
+    PINS[panel.key].forEach((p,idx)=>{
+      const pt=proj([p.lon,p.lat]); if(!pt) return;
+      const [px,py]=pt;
+      if(px<-10||px>W+10||py<-10||py>H+10) return;
+      const isHov=(hovered===idx);
+      const r=isHov?10:7.5;
+      const glowR=isHov?26:16;
+
+      // Pulse glow
+      const gg=ctx.createRadialGradient(px,py,0,px,py,glowR);
+      gg.addColorStop(0,panel.pinColors[0]+(isHov?"cc":"66"));
+      gg.addColorStop(1,"rgba(0,0,0,0)");
+      ctx.beginPath();ctx.arc(px,py,glowR,0,Math.PI*2);ctx.fillStyle=gg;ctx.fill();
+
+      // White ring
+      ctx.beginPath();ctx.arc(px,py,r+1.5,0,Math.PI*2);
+      ctx.fillStyle=isHov?"white":"rgba(255,255,255,0.9)";ctx.fill();
+
+      // Pride gradient fill
+      const pg=ctx.createLinearGradient(px-r,py-r,px+r,py+r);
+      pg.addColorStop(0,panel.pinColors[0]);pg.addColorStop(1,panel.pinColors[1]);
+      ctx.beginPath();ctx.arc(px,py,r,0,Math.PI*2);ctx.fillStyle=pg;ctx.fill();
+
+      // Inner dot
+      ctx.beginPath();ctx.arc(px,py,r*0.32,0,Math.PI*2);ctx.fillStyle="white";ctx.fill();
+
+      pinCoords[idx]={x:px,y:py,pin:p};
+    });
+  }
+
+  // Full render
+  function fullRender(hov=null){
+    // Redraw entire canvas (mountains + trees stay, we just redraw pins on top)
+    drawPins(hov);
+    // Compass
+    drawCompass();
+  }
+
+  function drawCompass(){
+    const cx=W-22,cy=H-22,cr=Math.round(16*sc);
+    const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,cr);
+    cg.addColorStop(0,"rgba(255,255,255,0.2)");cg.addColorStop(1,"rgba(0,0,0,0.3)");
+    ctx.beginPath();ctx.arc(cx,cy,cr,0,Math.PI*2);ctx.fillStyle=cg;ctx.fill();
+    ctx.strokeStyle="rgba(255,255,255,0.5)";ctx.lineWidth=0.8;ctx.stroke();
+    const fs=Math.round(7*sc);
+    ctx.font=`bold ${fs}px Arial`;ctx.textAlign="center";
+    ctx.fillStyle="white";ctx.fillText("N",cx,cy-cr+fs+2);
+    ctx.fillStyle="rgba(255,255,255,0.5)";
+    ctx.fillText("S",cx,cy+cr-3);ctx.fillText("W",cx-cr+fs,cy+3);ctx.fillText("E",cx+cr-fs,cy+3);
+    const ag=ctx.createLinearGradient(cx,cy-cr,cx,cy+cr);
+    ag.addColorStop(0,panel.pinColors[0]);ag.addColorStop(1,panel.pinColors[1]);
+    ctx.beginPath();ctx.moveTo(cx,cy-cr+fs+4);ctx.lineTo(cx+3,cy+1);ctx.lineTo(cx,cy-2);ctx.lineTo(cx-3,cy+1);
+    ctx.closePath();ctx.fillStyle=ag;ctx.fill();
+  }
+
+  fullRender();
+
+  // ── INTERACTION ──────────────────────────────────────────────────────────────
+  function getXY(e){
+    const r=el.getBoundingClientRect();
+    const sx=W/r.width,sy=H/r.height;
+    const cx2=e.touches?e.touches[0].clientX:e.clientX;
+    const cy2=e.touches?e.touches[0].clientY:e.clientY;
+    return[(cx2-r.left)*sx,(cy2-r.top)*sy];
+  }
+  function hitPin(mx,my){
+    for(let i=pinCoords.length-1;i>=0;i--){
+      if(pinCoords[i]&&Math.hypot(mx-pinCoords[i].x,my-pinCoords[i].y)<16) return i;
+    }
+    return -1;
+  }
+
+  let lastHov=-1;
+  el.addEventListener("mousemove",e=>{
+    const[mx,my]=getXY(e);
+    const idx=hitPin(mx,my);
+    el.style.cursor=idx>=0?"pointer":"default";
+    if(idx!==lastHov){
+      lastHov=idx;
+      // Redraw pins only (fast)
+      // Clear pin layer by repainting — since canvas is stateful we do a quick full redraw
+      // For performance, just redraw pins atop existing art
+      drawPins(idx>=0?idx:null);
+      drawCompass();
+    }
+    if(idx>=0&&pinCoords[idx]){
+      showTip(pinCoords[idx].pin,panel.pinColors,e.clientX,e.clientY);
+    } else {
+      hideTip();
+    }
+  });
+  el.addEventListener("mouseleave",()=>{
+    hideTip();
+    if(lastHov!==-1){lastHov=-1;drawPins(null);drawCompass();}
+  });
+  el.addEventListener("click",e=>{
+    const[mx,my]=getXY(e);
+    const idx=hitPin(mx,my);
+    if(idx>=0&&pinCoords[idx]) showTip(pinCoords[idx].pin,panel.pinColors,e.clientX,e.clientY);
+  });
+  el.addEventListener("touchstart",e=>{
+    e.preventDefault();
+    const[mx,my]=getXY(e);
+    const idx=hitPin(mx,my);
+    if(idx>=0&&pinCoords[idx]) showTip(pinCoords[idx].pin,panel.pinColors,e.touches[0].clientX,e.touches[0].clientY);
+    else hideTip();
+  },{passive:false});
+}
+
+// ── LOAD & INIT ───────────────────────────────────────────────────────────────
+fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json")
+  .then(r=>r.json())
+  .then(world=>{
+    const countries=topojson.feature(world,world.objects.countries);
+    const phFeatures=countries.features.filter(f=>+f.id===608);
+    PANEL_CFG.forEach(p=>renderPanel(p,phFeatures));
+  })
+  .catch(()=>{
+    ["luzon","visayas","mindanao"].forEach(id=>{
+      const el=document.getElementById("c-"+id);
+      el.style.background="#1a0a0a";
+      el.style.height="300px";
+      const ctx=el.getContext("2d");
+      ctx.fillStyle="#666";ctx.font="13px Arial";ctx.textAlign="center";
+      ctx.fillText("Map data unavailable",el.width/2,150);
+    });
+  });
+
+// Resize handler
+window.addEventListener("resize",()=>{
+  fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json")
+    .then(r=>r.json())
+    .then(world=>{
+      const countries=topojson.feature(world,world.objects.countries);
+      const phFeatures=countries.features.filter(f=>+f.id===608);
+      PANEL_CFG.forEach(p=>renderPanel(p,phFeatures));
+    });
+});
+</script>
+</body>
+</html>
